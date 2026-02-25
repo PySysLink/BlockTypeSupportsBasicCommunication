@@ -25,8 +25,16 @@ namespace BlockTypeSupports::BasicCommunicationSupport
             {
                 std::string fileName = PySysLinkBase::ConfigurationValueManager::TryGetConfigurationValue<std::string>("VariableListFile", blockConfiguration);
                 int opcUaServerPort = PySysLinkBase::ConfigurationValueManager::TryGetConfigurationValue<int>("OPCUAServerPort", blockConfiguration);
-
-                auto variableDefinitions = parseVariableListFile(fileName);
+                
+                std::vector<VariableDefinition> variableDefinitions;
+                if (fileName == "None")
+                {
+                    variableDefinitions = std::vector<VariableDefinition>{};
+                    spdlog::warn("No variable list file specified for OPC UA Server block. No variables will be created.");
+                }
+                else {
+                    variableDefinitions = parseVariableListFile(fileName);
+                }
                 
                 this->opcUaChannel = std::make_shared<OPCUAServerChannel>(variableDefinitions, opcUaServerPort);
 

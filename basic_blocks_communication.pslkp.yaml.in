@@ -11,10 +11,16 @@ blockLibraries:
       - name: OPCUAServer
         configurationValues:
           - name: VariableListFile
-            defaultValue: 
+            defaultValue: None
             type: string
           - name: OPCUAServerPort
             defaultValue: 4840
+            type: int
+          - name: InputPortNumber
+            defaultValue: 0
+            type: int
+          - name: OutputPortNumber
+            defaultValue: 1
             type: int
           
       

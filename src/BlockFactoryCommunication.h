@@ -34,7 +34,7 @@ public:
 
         spdlog::debug("Creating BasicCommunication block with block class {}", blockClass);
 
-        if (blockClass == "OPCUAServer")
+        if (blockClass == "BasicBlocksCommunication/OPCUAServer")
         {
             return std::make_shared<OPCUAServerSimulationBlock>(blockConfiguration, eventHandler);
         }
