@@ -1,0 +1,58 @@
+#ifndef SRC_COMMUNICATION_BLOCK_FACTORY_H
+#define SRC_COMMUNICATION_BLOCK_FACTORY_H
+
+#include <PySysLinkBase/IBlockFactory.h>
+#include <PySysLinkBase/IBlockEventsHandler.h>
+#include <PySysLinkBase/ConfigurationValue.h>
+
+#include <memory>
+#include <string>
+#include <map>
+#include <stdexcept>
+#include "spdlog/spdlog.h"
+
+namespace BlockTypeSupports::BasicCommunicationSupport
+{
+
+class BlockFactoryCommunication : public PySysLinkBase::IBlockFactory
+{
+public:
+    BlockFactoryCommunication(std::map<std::string, PySysLinkBase::ConfigurationValue> pluginConfiguration)
+    {
+        
+    }
+
+    std::shared_ptr<PySysLinkBase::ISimulationBlock>
+    CreateBlock(std::map<std::string, PySysLinkBase::ConfigurationValue> blockConfiguration,
+                std::shared_ptr<PySysLinkBase::IBlockEventsHandler> eventHandler) override
+    {
+        std::string signalType = "Double";
+        try
+        {
+            signalType = PySysLinkBase::ConfigurationValueManager::TryGetConfigurationValue<std::string>("SignalType", blockConfiguration);
+        }
+        catch (std::out_of_range&)
+        {
+            // default: Double
+        }
+
+        spdlog::debug("Creating BasicCommunication block with signal type {}", signalType);
+
+        if (signalType == "Double")
+        {
+            throw std::invalid_argument("Unsupported SignalType: " + signalType);
+        }
+        else if (signalType == "Complex")
+        {
+            throw std::invalid_argument("Unsupported SignalType: " + signalType);
+        }
+        else
+        {
+            throw std::invalid_argument("Unsupported SignalType: " + signalType);
+        }
+    }
+};
+
+} // namespace BlockTypeSupports::BasicCommunicationSupport
+
+#endif // SRC_COMMUNICATION_BLOCK_FACTORY_H

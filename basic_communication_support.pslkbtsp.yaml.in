@@ -1,0 +1,7 @@
+pluginName: basic_communication_support
+pluginType: blockTypeSupport
+blockType: BasicCommunication
+version: @PROJECT_VERSION@
+dependsOn:
+  - name: PySysLinkBase
+    version: @PYSYSLINK_BASE_VERSION@
