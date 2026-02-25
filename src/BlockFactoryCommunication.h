@@ -11,6 +11,8 @@
 #include <stdexcept>
 #include "spdlog/spdlog.h"
 
+#include "OPCUAServerSimulationBlock.h"
+
 namespace BlockTypeSupports::BasicCommunicationSupport
 {
 
@@ -26,29 +28,19 @@ public:
     CreateBlock(std::map<std::string, PySysLinkBase::ConfigurationValue> blockConfiguration,
                 std::shared_ptr<PySysLinkBase::IBlockEventsHandler> eventHandler) override
     {
-        std::string signalType = "Double";
-        try
-        {
-            signalType = PySysLinkBase::ConfigurationValueManager::TryGetConfigurationValue<std::string>("SignalType", blockConfiguration);
-        }
-        catch (std::out_of_range&)
-        {
-            // default: Double
-        }
 
-        spdlog::debug("Creating BasicCommunication block with signal type {}", signalType);
+        std::string blockClass = PySysLinkBase::ConfigurationValueManager::TryGetConfigurationValue<std::string>("BlockClass", blockConfiguration);
 
-        if (signalType == "Double")
+
+        spdlog::debug("Creating BasicCommunication block with block class {}", blockClass);
+
+        if (blockClass == "OPCUAServer")
         {
-            throw std::invalid_argument("Unsupported SignalType: " + signalType);
-        }
-        else if (signalType == "Complex")
-        {
-            throw std::invalid_argument("Unsupported SignalType: " + signalType);
+            return std::make_shared<OPCUAServerSimulationBlock>(blockConfiguration, eventHandler);
         }
         else
         {
-            throw std::invalid_argument("Unsupported SignalType: " + signalType);
+            throw std::invalid_argument("Unsupported BlockClass: " + blockClass);
         }
     }
 };
