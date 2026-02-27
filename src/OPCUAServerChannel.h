@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <thread>
 #include <mutex>
+#include <condition_variable>
+#include <atomic>
 
 #include "PySysLinkBase/FullySupportedSignalValue.h"
 
@@ -28,8 +30,16 @@ namespace BlockTypeSupports::BasicCommunicationSupport
             UA_Server* server;
             std::thread serverThread;
             std::mutex serverMutex;
+            std::mutex startupMutex;
+            std::condition_variable startupCv;
+            bool serverStarted = false;
 
             std::unordered_map<std::string, UA_NodeId> variableNodes;
+            
+            volatile UA_Boolean running{true};
+
+            UA_StatusCode startupStatus = UA_STATUSCODE_GOOD;
+            std::string startupErrorMessage;
 
             void runServer();
 

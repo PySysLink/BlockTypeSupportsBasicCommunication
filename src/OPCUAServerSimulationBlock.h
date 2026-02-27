@@ -42,7 +42,7 @@ namespace BlockTypeSupports::BasicCommunicationSupport
                 supportedSampleTimeTypes.push_back(PySysLinkBase::SampleTimeType::discrete);
                 this->sampleTime = std::make_shared<PySysLinkBase::SampleTime>(PySysLinkBase::SampleTimeType::inherited, supportedSampleTimeTypes);
 
-                std::shared_ptr<PySysLinkBase::UnknownTypeSignalValue> signalValue = std::make_shared<PySysLinkBase::SignalValue<std::shared_ptr<ICommunicationChannel>>>(PySysLinkBase::SignalValue<std::shared_ptr<ICommunicationChannel>>(this->opcUaChannel));
+                std::shared_ptr<PySysLinkBase::UnknownTypeSignalValue> signalValue = std::make_shared<PySysLinkBase::SignalValue<std::shared_ptr<ICommunicationChannel>>>(this->opcUaChannel);
                 this->outputPorts.push_back(std::make_shared<PySysLinkBase::OutputPort>(signalValue));
             }
 

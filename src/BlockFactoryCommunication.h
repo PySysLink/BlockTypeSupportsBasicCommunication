@@ -12,6 +12,8 @@
 #include "spdlog/spdlog.h"
 
 #include "OPCUAServerSimulationBlock.h"
+#include "ReadValueSimulationBlock.h"
+#include "WriteValueSimulationBlock.h"
 
 namespace BlockTypeSupports::BasicCommunicationSupport
 {
@@ -37,6 +39,46 @@ public:
         if (blockClass == "BasicBlocksCommunication/OPCUAServer")
         {
             return std::make_shared<OPCUAServerSimulationBlock>(blockConfiguration, eventHandler);
+        }
+        if (blockClass == "BasicBlocksCommunication/ReadValue")
+        {
+            std::string variableType = PySysLinkBase::ConfigurationValueManager::TryGetConfigurationValue<std::string>("VariableType", blockConfiguration);
+            if (variableType == "Double") {
+                return std::make_shared<ReadValueSimulationBlock<double>>(blockConfiguration, eventHandler);
+            }
+            else if (variableType == "Int") {
+                return std::make_shared<ReadValueSimulationBlock<int>>(blockConfiguration, eventHandler);
+            }
+            else if (variableType == "Bool") {
+                return std::make_shared<ReadValueSimulationBlock<bool>>(blockConfiguration, eventHandler);
+            }
+            else if (variableType == "String") {
+                return std::make_shared<ReadValueSimulationBlock<std::string>>(blockConfiguration, eventHandler);
+            }
+            else
+            {
+                throw std::invalid_argument("Unsupported VariableType for ReadValue block: " + variableType);
+            }
+        }
+        if (blockClass == "BasicBlocksCommunication/WriteValue")
+        {
+            std::string variableType = PySysLinkBase::ConfigurationValueManager::TryGetConfigurationValue<std::string>("VariableType", blockConfiguration);
+            if (variableType == "Double") {
+                return std::make_shared<WriteValueSimulationBlock<double>>(blockConfiguration, eventHandler);
+            }
+            else if (variableType == "Int") {
+                return std::make_shared<WriteValueSimulationBlock<int>>(blockConfiguration, eventHandler);
+            }
+            else if (variableType == "Bool") {
+                return std::make_shared<WriteValueSimulationBlock<bool>>(blockConfiguration, eventHandler);
+            }
+            else if (variableType == "String") {
+                return std::make_shared<WriteValueSimulationBlock<std::string>>(blockConfiguration, eventHandler);
+            }
+            else
+            {
+                throw std::invalid_argument("Unsupported VariableType for WriteValue block: " + variableType);
+            }
         }
         else
         {

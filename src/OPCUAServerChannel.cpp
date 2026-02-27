@@ -16,7 +16,6 @@ OPCUAServerChannel::OPCUAServerChannel(
         port,          // port
         nullptr        // certificate (nullptr = no security)
     );
-    UA_ServerConfig_setDefault(config);
 
     UA_NodeId parentNode = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
 
@@ -31,8 +30,9 @@ OPCUAServerChannel::OPCUAServerChannel(
             UA_Variant_clear(&value);
         }
 
-        attr.displayName =
-            UA_LOCALIZEDTEXT_ALLOC("en-US", var.Name.c_str());
+        attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", var.Name.c_str());
+
+        attr.accessLevel = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
 
         UA_NodeId variableNodeId;
         UA_QualifiedName name =
@@ -62,11 +62,19 @@ OPCUAServerChannel::OPCUAServerChannel(
     }
 
     serverThread = std::thread(&OPCUAServerChannel::runServer, this);
+
+    std::unique_lock<std::mutex> lock(startupMutex);
+    if (!startupCv.wait_for(lock, std::chrono::seconds(5),
+                        [&] { return serverStarted; }))
+    {
+        throw std::runtime_error("OPC UA server failed to start after timeout");
+    }
 }
 
 OPCUAServerChannel::~OPCUAServerChannel()
 {
-    UA_Server_run_shutdown(server);
+    running = false;
+
     if (serverThread.joinable())
         serverThread.join();
 
@@ -75,7 +83,13 @@ OPCUAServerChannel::~OPCUAServerChannel()
 
 void OPCUAServerChannel::runServer()
 {
-    UA_Server_run(server, nullptr);
+    {
+        std::lock_guard<std::mutex> lock(startupMutex);
+        serverStarted = true;
+    }
+    startupCv.notify_one();
+
+    UA_Server_run(server, &running);
 }
 
 PySysLinkBase::FullySupportedSignalValue OPCUAServerChannel::GetValue(std::string VariableName)

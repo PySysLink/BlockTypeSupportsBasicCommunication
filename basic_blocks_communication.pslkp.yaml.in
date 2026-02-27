@@ -22,5 +22,21 @@ blockLibraries:
           - name: OutputPortNumber
             defaultValue: 1
             type: int
+      - name: ReadValue
+        configurationValues:
+          - name: VariableName
+            defaultValue: None
+            type: string
+          - name: VariableType
+            defaultValue: Double
+            type: string
+      - name: WriteValue
+        configurationValues:
+          - name: VariableName
+            defaultValue: None
+            type: string
+          - name: VariableType
+            defaultValue: Double
+            type: string
           
       
