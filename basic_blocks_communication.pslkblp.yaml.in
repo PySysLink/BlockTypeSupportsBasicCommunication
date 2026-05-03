@@ -16,12 +16,8 @@ blockLibraries:
           - name: OPCUAServerPort
             defaultValue: 4840
             type: int
-          - name: InputPortNumber
-            defaultValue: 0
-            type: int
-          - name: OutputPortNumber
-            defaultValue: 1
-            type: int
+        inputPortNumber: 0
+        outputPortNumber: 1
       - name: ReadValue
         configurationValues:
           - name: VariableName
@@ -30,6 +26,8 @@ blockLibraries:
           - name: VariableType
             defaultValue: Double
             type: string
+        inputPortNumber: 1
+        outputPortNumber: 1
       - name: WriteValue
         configurationValues:
           - name: VariableName
@@ -38,5 +36,7 @@ blockLibraries:
           - name: VariableType
             defaultValue: Double
             type: string
+        inputPortNumber: 2
+        outputPortNumber: 0
           
       

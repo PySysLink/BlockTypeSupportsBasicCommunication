@@ -64,8 +64,8 @@ configure_file(
 )
 
 configure_file(
-    ${CMAKE_SOURCE_DIR}/basic_blocks_communication.pslkp.yaml.in
-    ${CMAKE_BINARY_DIR}/basic_blocks_communication.${PROJECT_VERSION_UNDERSCORE}.pslkp.yaml
+    ${CMAKE_SOURCE_DIR}/basic_blocks_communication.pslkblp.yaml.in
+    ${CMAKE_BINARY_DIR}/basic_blocks_communication.${PROJECT_VERSION_UNDERSCORE}.pslkblp.yaml
     @ONLY
 )
 
@@ -73,7 +73,7 @@ install(FILES ${CMAKE_BINARY_DIR}/basic_communication_support.${PROJECT_VERSION_
     DESTINATION ${PLUGIN_INSTALL_DIR}
 )
 
-install(FILES ${CMAKE_BINARY_DIR}/basic_blocks_communication.${PROJECT_VERSION_UNDERSCORE}.pslkp.yaml
+install(FILES ${CMAKE_BINARY_DIR}/basic_blocks_communication.${PROJECT_VERSION_UNDERSCORE}.pslkblp.yaml
     DESTINATION ${PLUGIN_INSTALL_DIR}
 )
 
